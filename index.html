@@ -4,7 +4,7 @@
     <meta name="robots" content="noindex">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
-    <title>p[AI]per</title>
+    <title>Sign Up Page</title>
     <style>
         canvas { display: block; margin: 0 auto; }
     </style>
@@ -29,11 +29,11 @@
                     <input name="email" type="text" class="input" placeholder="e.g. john.smith@acme.org.au" autocomplete="off">
                     </div>
                 </div>
+                <canvas id="preferenceCanvas" width="400" height="500"></canvas>
+                <input type="hidden" id="likedItems" name="likedItems">
+                <input type="submit" style="display: block; margin: 0 auto;" class="button is-link is-light" value="Sign up">
             </div>
         </div>
-        <canvas id="preferenceCanvas" width="800" height="600"></canvas>
-        <input type="hidden" id="likedItems" name="likedItems">
-        <button type="submit">Submit</button>
     </form>
 
     <script>
@@ -43,10 +43,10 @@
 
         // Updated balls setup with id and text
         var balls = [
-            {x: Math.floor(Math.random() * (Math.floor(700) - Math.ceil(100)) + Math.ceil(100)), y: Math.floor(Math.random() * (Math.floor(500) - Math.ceil(100)) + Math.ceil(100)), r: 40, id: 'law', text: 'Law'},
-            {x: Math.floor(Math.random() * (Math.floor(700) - Math.ceil(100)) + Math.ceil(100)), y: Math.floor(Math.random() * (Math.floor(500) - Math.ceil(100)) + Math.ceil(100)), r: 40, id: 'politics', text: 'Politics'},
-            {x: Math.floor(Math.random() * (Math.floor(700) - Math.ceil(100)) + Math.ceil(100)), y: Math.floor(Math.random() * (Math.floor(500) - Math.ceil(100)) + Math.ceil(100)), r: 40, id: 'technology', text: 'Technology'},
-            {x: Math.floor(Math.random() * (Math.floor(700) - Math.ceil(100)) + Math.ceil(100)), y: Math.floor(Math.random() * (Math.floor(500) - Math.ceil(100)) + Math.ceil(100)), r: 40, id: 'medicine', text: 'Medicine'}
+            {x: Math.floor(Math.random() * (Math.floor(300) - Math.ceil(100)) + Math.ceil(100)), y: Math.floor(Math.random() * (Math.floor(400) - Math.ceil(100)) + Math.ceil(100)), r: 40, id: 'law', text: 'Law'},
+            {x: Math.floor(Math.random() * (Math.floor(300) - Math.ceil(100)) + Math.ceil(100)), y: Math.floor(Math.random() * (Math.floor(400) - Math.ceil(100)) + Math.ceil(100)), r: 40, id: 'politics', text: 'Politics'},
+            {x: Math.floor(Math.random() * (Math.floor(300) - Math.ceil(100)) + Math.ceil(100)), y: Math.floor(Math.random() * (Math.floor(400) - Math.ceil(100)) + Math.ceil(100)), r: 40, id: 'technology', text: 'Technology'},
+            {x: Math.floor(Math.random() * (Math.floor(300) - Math.ceil(100)) + Math.ceil(100)), y: Math.floor(Math.random() * (Math.floor(400) - Math.ceil(100)) + Math.ceil(100)), r: 40, id: 'medicine', text: 'Medicine'}
         ];
 
         // Function to draw balls and text
@@ -70,14 +70,14 @@
             var dx = ball1.x - ball2.x;
             var dy = ball1.y - ball2.y;
             var distance = Math.sqrt(dx * dx + dy * dy);
-            return distance < (ball1.r + ball2.r + 100); // Add buffer distance of 100px
+            return distance < (ball1.r + ball2.r + 30); // Add buffer distance of 100px
         }
 
         // Function to generate random coordinates for a ball
         function generateCoordinates() {
             return {
-                x: Math.floor(Math.random() * (Math.floor(700) - Math.ceil(100)) + Math.ceil(100)),
-                y: Math.floor(Math.random() * (Math.floor(500) - Math.ceil(100)) + Math.ceil(100))
+                x: Math.floor(Math.random() * (Math.floor(300) - Math.ceil(100)) + Math.ceil(100)),
+                y: Math.floor(Math.random() * (Math.floor(400) - Math.ceil(100)) + Math.ceil(100))
             };
         }
 
