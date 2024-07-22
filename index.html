@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="robots" content="noindex">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <title>p[AI]per</title>
+    <style>
+        canvas { display: block; margin: 0 auto; }
+    </style>
+</head>
+<body>
+    <form id="signupForm">
+        <div class="columns is-centered is-mobile">
+            <div class="column is-one-third-desktop is-three-quarters-mobile is-three-quarters-tablet">
+                <br />
+                <img src="paiperco.png" style="width: 75%; display: block; margin: 0 auto;">
+                <br />
+                <br />
+                <div class="field">
+                    <label class="label">Name</label>
+                    <div class="control">
+                    <input name="name" type="text" class="input" placeholder="e.g. John Smith" autocomplete="off">
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Email</label>
+                    <div class="control">
+                    <input name="email" type="text" class="input" placeholder="e.g. john.smith@acme.org.au" autocomplete="off">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <canvas id="preferenceCanvas" width="800" height="600"></canvas>
+        <input type="hidden" id="likedItems" name="likedItems">
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        var canvas = document.getElementById('preferenceCanvas');
+        var ctx = canvas.getContext('2d');
+        var likedItems = [];
+
+        // Updated balls setup with id and text
+        var balls = [
+            {x: Math.floor(Math.random() * (Math.floor(700) - Math.ceil(100)) + Math.ceil(100)), y: Math.floor(Math.random() * (Math.floor(500) - Math.ceil(100)) + Math.ceil(100)), r: 40, id: 'law', text: 'Law'},
+            {x: Math.floor(Math.random() * (Math.floor(700) - Math.ceil(100)) + Math.ceil(100)), y: Math.floor(Math.random() * (Math.floor(500) - Math.ceil(100)) + Math.ceil(100)), r: 40, id: 'politics', text: 'Politics'},
+            {x: Math.floor(Math.random() * (Math.floor(700) - Math.ceil(100)) + Math.ceil(100)), y: Math.floor(Math.random() * (Math.floor(500) - Math.ceil(100)) + Math.ceil(100)), r: 40, id: 'technology', text: 'Technology'},
+            {x: Math.floor(Math.random() * (Math.floor(700) - Math.ceil(100)) + Math.ceil(100)), y: Math.floor(Math.random() * (Math.floor(500) - Math.ceil(100)) + Math.ceil(100)), r: 40, id: 'medicine', text: 'Medicine'}
+        ];
+
+        // Function to draw balls and text
+        function drawBall(ball) {
+            ctx.beginPath();
+            ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI*2);
+            ctx.fillStyle = '#4f5aba';
+            ctx.fill();
+            ctx.closePath();
+
+            // Draw text
+            ctx.fillStyle = '#FFFFFF';
+            ctx.font = '12px Arial';
+            ctx.textAlign = 'center'; // Center the text horizontally
+            ctx.textBaseline = 'middle'; // Center the text vertically
+            ctx.fillText(ball.text, ball.x, ball.y);
+        }
+
+        // Function to check if balls overlap
+        function checkOverlap(ball1, ball2) {
+            var dx = ball1.x - ball2.x;
+            var dy = ball1.y - ball2.y;
+            var distance = Math.sqrt(dx * dx + dy * dy);
+            return distance < (ball1.r + ball2.r + 100); // Add buffer distance of 100px
+        }
+
+        // Function to generate random coordinates for a ball
+        function generateCoordinates() {
+            return {
+                x: Math.floor(Math.random() * (Math.floor(700) - Math.ceil(100)) + Math.ceil(100)),
+                y: Math.floor(Math.random() * (Math.floor(500) - Math.ceil(100)) + Math.ceil(100))
+            };
+        }
+
+        // Function to update ball coordinates to avoid overlap
+        function updateCoordinates(ball) {
+            var newCoordinates = generateCoordinates();
+            while (balls.some(existingBall => checkOverlap(existingBall, { ...ball, ...newCoordinates }))) {
+                newCoordinates = generateCoordinates();
+            }
+            ball.x = newCoordinates.x;
+            ball.y = newCoordinates.y;
+        }
+
+        // Function to update all ball coordinates
+        function updateAllCoordinates() {
+            balls.forEach(ball => updateCoordinates(ball));
+        }
+
+        // Initial update of ball coordinates
+        updateAllCoordinates();
+
+        // Function to redraw all balls
+        function redrawBalls() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            balls.forEach(ball => drawBall(ball));
+        }
+
+        // Initial drawing of balls
+        redrawBalls();
+
+        canvas.addEventListener('click', function(event) {
+            var rect = canvas.getBoundingClientRect();
+            var x = event.clientX - rect.left;
+            var y = event.clientY - rect.top;
+            balls.forEach(ball => {
+                if (Math.sqrt((x-ball.x)**2 + (y-ball.y)**2) < ball.r) {
+                    ball.r += 5; // Increase ball size
+                    if (!likedItems.includes(ball.id)) {
+                        likedItems.push(ball.id); // Add to liked items
+                    }
+                    drawBall(ball); // Redraw ball
+                }
+            });
+            document.getElementById('likedItems').value = JSON.stringify(likedItems); // Update hidden input
+        });
+    </script>
+</body>
+</html>
